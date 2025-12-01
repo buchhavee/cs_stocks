@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Test Hugging Face Images</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background: #1a1a1a;
+            color: white;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .image-test {
+            margin: 20px 0;
+            padding: 20px;
+            background: #2a2a2a;
+            border-radius: 8px;
+        }
+
+        img {
+            max-width: 200px;
+            height: 150px;
+            object-fit: contain;
+            background: #333;
+            padding: 10px;
+            border-radius: 4px;
+        }
+
+        .status {
+            margin-top: 10px;
+            padding: 10px;
+            border-radius: 4px;
+        }
+
+        .success {
+            background: #1a4d2e;
+            color: #4ade80;
+        }
+
+        .error {
+            background: #4d1a1a;
+            color: #f87171;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Hugging Face Image Load Test</h1>
+
+        <div class="image-test">
+            <h3>Image ID: 1 (UMP-45 | Caramel)</h3>
+            <img id="img1" src="https://huggingface.co/datasets/While402/CounterStrike2Skins/resolve/main/images/1.png"
+                alt="Test Image 1" />
+            <div id="status1" class="status">Loading...</div>
+        </div>
+
+        <div class="image-test">
+            <h3>Image ID: 100</h3>
+            <img id="img2"
+                src="https://huggingface.co/datasets/While402/CounterStrike2Skins/resolve/main/images/100.png"
+                alt="Test Image 2" />
+            <div id="status2" class="status">Loading...</div>
+        </div>
+
+        <div class="image-test">
+            <h3>Image ID: 500</h3>
+            <img id="img3"
+                src="https://huggingface.co/datasets/While402/CounterStrike2Skins/resolve/main/images/500.png"
+                alt="Test Image 3" />
+            <div id="status3" class="status">Loading...</div>
+        </div>
+    </div>
+
+    <script>
+        function testImage(imgId, statusId) {
+            const img = document.getElementById(imgId);
+            const status = document.getElementById(statusId);
+
+            img.onload = function () {
+                status.textContent = `✅ Success! Image loaded (${img.naturalWidth}x${img.naturalHeight})`;
+                status.className = 'status success';
+            };
+
+            img.onerror = function () {
+                status.textContent = '❌ Failed to load image. CORS or file not found.';
+                status.className = 'status error';
+            };
+        }
+
+        testImage('img1', 'status1');
+        testImage('img2', 'status2');
+        testImage('img3', 'status3');
+    </script>
+</body>
+
+</html>

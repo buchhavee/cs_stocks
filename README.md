@@ -1,24 +1,98 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# CS2 Skin Tracker 🎮
 
-## Getting Started
+Et Next.js baseret værktøj til at tracke Counter-Strike 2 skin priser og statistik. Projektet bruger rigtige CS2 skin data fra Hugging Face datasættet.
 
-First, run the development server:
+## ✨ Features
+
+- 🔍 **Realtids søgning** - Søg efter CS2 skins med autocomplete
+- 📊 **Portfolio tracking** - Hold styr på værdien af dine skins
+- 📈 **Pris statistik** - Se ændringer i pris over tid
+- 🖼️ **Rigtige billeder** - Viser faktiske skin billeder fra datasættet
+- 🎨 **Modern UI** - Bygget med Tailwind CSS og shadcn/ui
+
+## 🚀 Getting Started
+
+Først, installer dependencies:
+
+```bash
+npm install
+```
+
+Derefter, kør development serveren:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Åbn [http://localhost:3000](http://localhost:3000) i din browser for at se applikationen.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 🔌 Hugging Face API Integration
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Projektet bruger [While402/CounterStrike2Skins](https://huggingface.co/datasets/While402/CounterStrike2Skins) datasættet fra Hugging Face.
+
+### API Funktioner
+
+Se `lib/huggingface-api.ts` for implementeringen:
+
+- `fetchSkinsFromHuggingFace(offset, length)` - Hent skins med pagination
+- `searchSkins(searchTerm, limit)` - Søg efter skins
+- `getTotalSkinsCount()` - Få det totale antal skins
+
+### Eksempel:
+
+```typescript
+import { searchSkins } from "@/lib/huggingface-api";
+
+// Søg efter AK-47 skins
+const results = await searchSkins("AK-47", 10);
+```
+
+For mere detaljeret dokumentation, se [lib/README_HUGGINGFACE.md](lib/README_HUGGINGFACE.md).
+
+## 📁 Projekt Struktur
+
+```
+cs_stocks/
+├── app/
+│   ├── layout.tsx          # Root layout
+│   ├── page.tsx            # Homepage
+│   └── globals.css         # Global styles
+├── components/
+│   ├── skin-tracker.tsx    # Main tracker komponent
+│   ├── skin-list.tsx       # Liste af trackede skins
+│   ├── price-chart.tsx     # Pris graf
+│   └── ui/                 # shadcn/ui komponenter
+├── lib/
+│   ├── huggingface-api.ts  # Hugging Face API integration
+│   └── utils.ts            # Utility funktioner
+└── test-api.ts             # API test script
+```
+
+## 🛠️ Tech Stack
+
+- **Framework:** Next.js 16 (App Router)
+- **Styling:** Tailwind CSS
+- **UI Components:** shadcn/ui
+- **Charts:** Recharts
+- **Icons:** Lucide React
+- **TypeScript:** For type safety
+
+## 📊 Data Source
+
+Skin data kommer fra Hugging Face API:
+
+```bash
+curl -X GET \
+  "https://datasets-server.huggingface.co/rows?dataset=While402%2FCounterStrike2Skins&config=metadata&split=metadata&offset=0&length=100"
+```
+
+## 🔮 Fremtidige Forbedringer
+
+- [ ] Integrer med CS2 market API for live priser
+- [ ] Tilføj localStorage for at gemme tracket skins
+- [ ] Implementer filtrering efter rarity
+- [ ] Tilføj historiske pris grafer
+- [ ] Export portfolio til CSV/JSON
 
 ## Learn More
 
