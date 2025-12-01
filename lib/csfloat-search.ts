@@ -1,7 +1,18 @@
 // CSFloat API til søgning af skins
 // Bedre end Hugging Face fordi den understøtter direkte søgning og har prisdata
 
-const CSFLOAT_API_BASE = "/api/csfloat";
+const getApiBase = () => {
+  // I browser miljø, brug relativ URL
+  if (typeof window !== "undefined") {
+    return "/api/csfloat";
+  }
+  // I server miljø (SSR), brug absolut URL hvis VERCEL_URL er sat
+  if (process.env.VERCEL_URL) {
+    return `https://${process.env.VERCEL_URL}/api/csfloat`;
+  }
+  // Fallback til localhost i development
+  return "http://localhost:3000/api/csfloat";
+};
 
 export interface CSFloatSearchResult {
   id: string;
@@ -43,7 +54,7 @@ export async function getCSFloatListings(marketHashName: string, limit: number =
       sort_by: "lowest_price",
     });
 
-    const url = `${CSFLOAT_API_BASE}?${params}`;
+    const url = `${getApiBase()}?${params}`;
     console.log(`[CSFloat Listings ${searchId}] 📡 Fetching from CSFloat`);
 
     const response = await fetch(url);
@@ -98,7 +109,7 @@ export async function searchSkinsViaCSFloat(searchTerm: string, limit: number = 
       sort_by: "most_recent",
     });
 
-    const url = `${CSFLOAT_API_BASE}?${params}`;
+    const url = `${getApiBase()}?${params}`;
     console.log(`[CSFloat Search ${searchId}] 📡 Fetching recent listings from CSFloat`);
 
     const response = await fetch(url);

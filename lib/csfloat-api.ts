@@ -2,7 +2,18 @@
 // Dokumentation: https://docs.csfloat.com/
 // Bruger vores egen API route for at undgå CORS problemer
 
-const CSFLOAT_API_BASE = "/api/csfloat";
+const getApiBase = () => {
+  // I browser miljø, brug relativ URL
+  if (typeof window !== "undefined") {
+    return "/api/csfloat";
+  }
+  // I server miljø (SSR), brug absolut URL hvis VERCEL_URL er sat
+  if (process.env.VERCEL_URL) {
+    return `https://${process.env.VERCEL_URL}/api/csfloat`;
+  }
+  // Fallback til localhost i development
+  return "http://localhost:3000/api/csfloat";
+};
 
 export interface CSFloatListing {
   id: string;
@@ -58,7 +69,7 @@ export async function getSkinPrice(marketHashName: string): Promise<PriceData> {
       sort_by: "lowest_price",
     });
 
-    const url = `${CSFLOAT_API_BASE}?${params}`;
+    const url = `${getApiBase()}?${params}`;
 
     const response = await fetch(url, {
       method: "GET",

@@ -1,6 +1,18 @@
 // API for Hugging Face Counter-Strike 2 Skins dataset
 // Bruger vores egen API route for at undgå CORS problemer
-const HUGGINGFACE_API_BASE = "/api/huggingface";
+const getApiBase = () => {
+  // I browser miljø, brug relativ URL
+  if (typeof window !== "undefined") {
+    return "/api/huggingface";
+  }
+  // I server miljø (SSR), brug absolut URL hvis VERCEL_URL er sat
+  if (process.env.VERCEL_URL) {
+    return `https://${process.env.VERCEL_URL}/api/huggingface`;
+  }
+  // Fallback til localhost i development
+  return "http://localhost:3000/api/huggingface";
+};
+
 const DATASET = "While402/CounterStrike2Skins";
 const CONFIG = "metadata";
 const SPLIT = "metadata";
@@ -79,7 +91,7 @@ export async function fetchSkinsFromHuggingFace(offset: number = 0, length: numb
       length: length.toString(),
     });
 
-    const url = `${HUGGINGFACE_API_BASE}?${params}`;
+    const url = `${getApiBase()}?${params}`;
 
     const response = await fetch(url, {
       method: "GET",
@@ -209,7 +221,7 @@ export async function getTotalSkinsCount(): Promise<number> {
       length: "1",
     });
 
-    const url = `${HUGGINGFACE_API_BASE}?${params}`;
+    const url = `${getApiBase()}?${params}`;
 
     const response = await fetch(url, {
       method: "GET",
